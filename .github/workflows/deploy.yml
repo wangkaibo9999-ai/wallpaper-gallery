@@ -1,0 +1,163 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 推送到 main 分支时触发
+  push:
+    branches: [main]
+
+  # 定时触发：每天 UTC 18:00（北京时间次日 02:00）- 低峰期,图床同步后 2 小时部署
+  schedule:
+    - cron: '0 18 * * *'
+
+  # 手动触发
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 权限
+# 设置 GITHUB_TOKEN 权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只允许一个并发部署
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest CDN version from nuanXinProPic
+        id: cdn_version
+        run: |
+          # 使用 GitHub API 获取图床仓库的最新 tag
+          LATEST_TAG=$(curl -s "https://api.github.com/repos/IT-NuanxinPro/nuanXinProPic/tags" | jq -r '.[0].name // "v1.0.4"')
+
+          # 如果 API 返回空或错误，使用备用默认值
+          if [ -z "$LATEST_TAG" ] || [ "$LATEST_TAG" == "null" ]; then
+            LATEST_TAG="v1.0.4"
+            echo "⚠️ Failed to get tag from API, using fallback: $LATEST_TAG"
+          else
+            echo "✅ Got latest CDN version: $LATEST_TAG"
+          fi
+
+          echo "version=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Update CDN version in constants.js
+        run: |
+          CDN_VERSION="${{ steps.cdn_version.outputs.version }}"
+          echo "📦 Updating CDN_VERSION to: $CDN_VERSION"
+
+          # 使用 sed 替换版本号
+          sed -i "s/export const CDN_VERSION = '[^']*'/export const CDN_VERSION = '$CDN_VERSION'/" src/utils/constants.js
+
+          # 验证替换结果
+          echo "✅ Updated constants.js:"
+          grep "CDN_VERSION" src/utils/constants.js
+
+      - name: Checkout nuanXinProPic (wallpaper source)
+        uses: actions/checkout@v4
+        with:
+          repository: IT-NuanxinPro/nuanXinProPic
+          path: nuanXinProPic
+          fetch-depth: 1  # 只需最新版本，时间戳从备份文件恢复
+
+ 
+      - name: Restore file timestamps from backup
+        run: |
+          cd nuanXinProPic
+
+          # 优先使用完整备份文件（包含所有三个系列）
+          if [ -f "timestamps-backup-all.txt" ]; then
+            echo "✅ Found timestamps-backup-all.txt, restoring all file timestamps..."
+
+            # 使用完整备份文件恢复时间戳
+            chmod +x scripts/restore-timestamps.sh
+            BACKUP_FILE=timestamps-backup-all.txt ./scripts/restore-timestamps.sh
+
+            echo "✅ All file timestamps restored from backup"
+          elif [ -f "timestamps-backup.txt" ]; then
+            echo "✅ Found timestamps-backup.txt, restoring desktop file timestamps..."
+
+            # 使用旧的备份文件（仅 desktop）
+            chmod +x scripts/restore-timestamps.sh
+            ./scripts/restore-timestamps.sh
+
+            echo "✅ Desktop file timestamps restored from backup"
+          else
+            echo "⚠️ No timestamps backup file found, skipping timestamp restoration"
+          fi
+
+          # 验证：显示几个文件的时间
+          echo "📅 Sample file timestamps:"
+          echo "Desktop:"
+          ls -lh wallpaper/desktop/动漫/二次元/ 2>/dev/null | head -3 || echo "Desktop directory not found"
+          echo "Mobile:"
+          ls -lh wallpaper/mobile/动漫/ 2>/dev/null | head -3 || echo "Mobile directory not found"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install ImageMagick (for image dimensions)
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      # generate-data.js 已包含在 pnpm build 中，无需单独执行
+
+      - name: Build
+        run: pnpm build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Purge Cloudflare cache
+        if: success()
+        run: |
+          echo "🧹 Purging Cloudflare cache..."
+
+          # 清除关键文件缓存（index.html 和 version.json）
+          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"files":["https://wallpaper.061129.xyz/","https://wallpaper.061129.xyz/index.html","https://wallpaper.061129.xyz/version.json"]}')
+
+          # 检查响应
+          SUCCESS=$(echo "$RESPONSE" | jq -r '.success')
+          if [ "$SUCCESS" = "true" ]; then
+            echo "✅ Successfully purged version.json cache"
+          else
+            echo "⚠️ Cache purge response: $RESPONSE"
+          fi

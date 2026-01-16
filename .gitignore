@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Auto-generated
+auto-imports.d.ts
+components.d.ts
+public/data/*
+!public/data/stats/
+public/version.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.kiro
+.claude
+.shared
+.spec-workflow
+.code-workspace
+.zcf
+ARCHITECTURE.md
+SEO提交流程.md

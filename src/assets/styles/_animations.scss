@@ -1,0 +1,246 @@
+// ========================================
+// 动画定义 (Sass)
+// ========================================
+
+// 关键帧动画
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// ========================================
+// Vue Transition 类
+// ========================================
+
+// 淡入淡出
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// 滑动淡入
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all var(--transition-normal);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+// 缩放淡入
+.scale-enter-active,
+.scale-leave-active {
+  transition: all var(--transition-normal);
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+// 弹窗动画
+.modal-enter-active,
+.modal-leave-active {
+  transition: all var(--transition-slow);
+
+  .modal-overlay {
+    transition: opacity var(--transition-slow);
+  }
+
+  .modal-content {
+    transition: all var(--transition-slow);
+  }
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  .modal-overlay {
+    opacity: 0;
+  }
+
+  .modal-content {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+}
+
+// 列表项动画
+.list-enter-active,
+.list-leave-active {
+  transition: all var(--transition-normal);
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.list-move {
+  transition: transform var(--transition-normal);
+}
+
+// 卡片网格动画
+.grid-enter-active {
+  transition: all var(--transition-slow);
+}
+
+.grid-enter-from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+}
+
+.grid-leave-active {
+  position: absolute;
+  transition: all var(--transition-normal);
+}
+
+.grid-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.grid-move {
+  transition: transform var(--transition-slow);
+}
+
+// ========================================
+// 工具类
+// ========================================
+
+.animate-fadeIn {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp var(--transition-normal) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn var(--transition-normal) forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 25%,
+    var(--color-bg-hover) 50%,
+    var(--color-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+// 延迟动画 mixin
+@mixin stagger-delay($count: 10, $base-delay: 50ms) {
+  @for $i from 1 through $count {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$base-delay * $i};
+    }
+  }
+}

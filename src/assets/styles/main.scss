@@ -1,0 +1,1305 @@
+// ========================================
+// 全局样式 (Sass)
+// ========================================
+
+@use 'variables' as *;
+@use 'animations';
+
+// ========================================
+// Element Plus 主题定制
+// ========================================
+:root {
+  // Element Plus 主色调
+  --el-color-primary: #{$color-accent-light};
+  --el-color-primary-light-3: rgba(99, 102, 241, 0.7);
+  --el-color-primary-light-5: rgba(99, 102, 241, 0.5);
+  --el-color-primary-light-7: rgba(99, 102, 241, 0.3);
+  --el-color-primary-light-8: rgba(99, 102, 241, 0.2);
+  --el-color-primary-light-9: rgba(99, 102, 241, 0.1);
+  --el-color-primary-dark-2: #4f46e5;
+
+  // Element Plus 背景和边框
+  --el-bg-color: #{$color-bg-secondary-light};
+  --el-bg-color-overlay: #{$color-bg-card-light};
+  --el-fill-color-blank: #{$color-bg-secondary-light};
+  --el-fill-color-light: #{$color-bg-hover-light};
+  --el-border-color: #{$color-border-light};
+  --el-border-color-light: #{$color-border-light};
+  --el-border-color-lighter: #{$color-border-light};
+
+  // Element Plus 文字颜色
+  --el-text-color-primary: #{$color-text-primary-light};
+  --el-text-color-regular: #{$color-text-secondary-light};
+  --el-text-color-secondary: #{$color-text-muted-light};
+  --el-text-color-placeholder: #{$color-text-muted-light};
+
+  // Element Plus 其他
+  --el-border-radius-base: #{$radius-md};
+  --el-border-radius-small: #{$radius-sm};
+  --el-font-family: #{$font-family};
+}
+
+// 深色主题 Element Plus 覆盖
+[data-theme='dark'] {
+  --el-color-primary: #{$color-accent-dark};
+  --el-color-primary-light-3: rgba(129, 140, 248, 0.7);
+  --el-color-primary-light-5: rgba(129, 140, 248, 0.5);
+  --el-color-primary-light-7: rgba(129, 140, 248, 0.3);
+  --el-color-primary-light-8: rgba(129, 140, 248, 0.2);
+  --el-color-primary-light-9: rgba(129, 140, 248, 0.1);
+  --el-color-primary-dark-2: #a5b4fc;
+
+  --el-bg-color: #{$color-bg-secondary-dark};
+  --el-bg-color-overlay: #{$color-bg-card-dark};
+  --el-fill-color-blank: #{$color-bg-secondary-dark};
+  --el-fill-color-light: #{$color-bg-hover-dark};
+  --el-border-color: #{$color-border-dark};
+  --el-border-color-light: #{$color-border-dark};
+  --el-border-color-lighter: #{$color-border-dark};
+
+  --el-text-color-primary: #{$color-text-primary-dark};
+  --el-text-color-regular: #{$color-text-secondary-dark};
+  --el-text-color-secondary: #{$color-text-muted-dark};
+  --el-text-color-placeholder: #{$color-text-muted-dark};
+
+  // Element Plus Select 输入框
+  .el-select {
+    --el-select-input-focus-border-color: #{$color-accent-dark};
+  }
+
+  .el-select__wrapper {
+    background-color: #{$color-bg-secondary-dark} !important;
+    box-shadow: 0 0 0 1px #{$color-border-dark} inset !important;
+
+    &:hover {
+      box-shadow: 0 0 0 1px #{$color-text-muted-dark} inset !important;
+    }
+
+    &.is-focused {
+      box-shadow: 0 0 0 1px #{$color-accent-dark} inset !important;
+    }
+  }
+
+  .el-select__placeholder {
+    color: #{$color-text-muted-dark};
+  }
+
+  .el-select__selected-item {
+    color: #{$color-text-primary-dark};
+  }
+
+  // 深色模式下拉框样式
+  .el-select-dropdown {
+    background-color: #{$color-bg-card-dark};
+    border-color: #{$color-border-dark};
+  }
+
+  .el-select-dropdown__item {
+    color: #{$color-text-primary-dark};
+
+    &:hover,
+    &.hover {
+      background-color: #{$color-bg-hover-dark};
+    }
+
+    &.is-selected {
+      color: #{$color-accent-dark};
+      background-color: rgba(129, 140, 248, 0.15);
+    }
+  }
+
+  .el-input__wrapper {
+    background-color: #{$color-bg-secondary-dark};
+    box-shadow: 0 0 0 1px #{$color-border-dark} inset;
+  }
+
+  .el-popper.is-light {
+    background: #{$color-bg-card-dark};
+    border-color: #{$color-border-dark};
+  }
+
+  .el-popper.is-light .el-popper__arrow::before {
+    background: #{$color-bg-card-dark};
+    border-color: #{$color-border-dark};
+  }
+}
+
+// Reset & Base
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // 根字体由 flexible.js 动态设置：
+  // - PC 端（>=768px）：37.5px，让 rem 值等于原始 px
+  // - 移动端（<768px）：屏幕宽度/10，实现等比缩放
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  // 移动端防止横向滚动（使用 clip 避免影响 sticky 定位）
+  overflow-x: clip;
+  // 防止滚动条出现/消失时页面抖动（预留滚动条空间）
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-md;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+  min-height: 100vh;
+  // 移动端防止横向滚动（使用 clip 避免影响 sticky 定位）
+  overflow-x: clip;
+  // 移动端安全区域适配
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  outline: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+// ========================================
+// 布局容器
+// ========================================
+
+.container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include tablet-up {
+    padding: 0 $spacing-lg;
+  }
+
+  @include desktop-up {
+    padding: 0 $spacing-xl;
+  }
+
+  // 2K 屏幕加宽容器
+  @include screen-2k-up {
+    max-width: $container-max-width-xl;
+    padding: 0 $spacing-2xl;
+  }
+
+  // 4K 屏幕进一步加宽
+  @include screen-4k-up {
+    max-width: $container-max-width-2xl;
+  }
+}
+
+// ========================================
+// 通用组件样式
+// ========================================
+
+// 卡片
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+// 按钮
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  font-weight: $font-weight-medium;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+
+  &--primary {
+    background: var(--color-accent);
+    color: white;
+
+    &:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &--secondary {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+
+    &:hover {
+      background: var(--color-border);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+
+    &:hover {
+      background: var(--color-bg-hover);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &--icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--radius-full);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// 输入框
+.input {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+  }
+}
+
+// 标签
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+
+  &--success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+  }
+
+  &--warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+  }
+
+  &--secondary {
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
+  }
+}
+
+// ========================================
+// 滚动条
+// ========================================
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+
+  &:hover {
+    background: var(--color-text-muted);
+  }
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-bg-secondary);
+}
+
+// ========================================
+// 工具类
+// ========================================
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+
+.font-medium {
+  font-weight: $font-weight-medium;
+}
+.font-semibold {
+  font-weight: $font-weight-semibold;
+}
+.font-bold {
+  font-weight: $font-weight-bold;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ========================================
+// Vant 组件全局覆盖
+// ========================================
+.van-overlay {
+  z-index: 2001 !important;
+}
+
+.van-popup {
+  z-index: 2002 !important;
+}
+
+// 移动端筛选弹窗深色模式（全局样式，因为 Teleport 到 body）
+.filter-popup.is-dark,
+.van-popup.filter-popup.is-dark {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+.popup-content.is-dark {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+// ========================================
+// 弹窗背景滚动锁定
+// ========================================
+body.modal-open {
+  position: fixed;
+  width: 100%;
+  overflow: hidden !important;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+// ========================================
+// 全屏浏览模式
+// ========================================
+body.fullscreen-mode {
+  .app-header {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hero-section {
+    display: none;
+  }
+
+  .filter-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    margin: 0;
+    border-radius: 0;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding: $spacing-sm $spacing-lg;
+  }
+
+  .main-content {
+    padding-top: 60px;
+  }
+
+  .app-footer {
+    display: none;
+  }
+
+  // 全屏退出提示
+  &::after {
+    content: '按 ESC 退出全屏模式';
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: $radius-md;
+    opacity: 0;
+    animation: fadeInOut 3s ease forwards;
+    pointer-events: none;
+    z-index: 1000;
+  }
+}
+
+// ========================================
+// 真机显示模式（手机端全屏显示壁纸）
+// ========================================
+
+// 默认状态：添加过渡动画，退出真机模式时平滑恢复
+.portrait-modal-overlay {
+  transition: background 0.3s ease;
+}
+
+.portrait-modal-content {
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+body.device-mode {
+  overflow: hidden !important;
+
+  // 使用 visibility + opacity 替代 display: none
+  // 保持布局占位，避免退出真机模式时卡片大小突变
+  .app-header,
+  .app-footer,
+  .filter-panel,
+  .wallpaper-grid-wrapper {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .portrait-modal-overlay {
+    background: #ffffff !important; // 真机显示模式也是白色背景
+  }
+
+  .portrait-modal-content {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .modal-close,
+  .modal-nav,
+  .portrait-info {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  // 点击屏幕显示/隐藏控制按钮
+  &.show-controls {
+    .modal-close,
+    .modal-nav,
+    .portrait-info {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+// ========================================
+// 分类级联选择器样式
+// ========================================
+.category-cascader-popper {
+  // 隐藏单选框按钮
+  .el-radio {
+    display: none !important;
+  }
+}
+
+// ========================================
+// Element Plus Select 下拉菜单全局样式 - 高级感设计
+// ========================================
+
+// 下拉菜单容器
+.el-select-dropdown {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px !important;
+  overflow: hidden !important;
+}
+
+// 下拉菜单滚动区域
+.el-select-dropdown__wrap {
+  padding: 0 !important;
+  max-height: 280px !important;
+}
+
+.el-select-dropdown__list {
+  padding: 0 !important;
+}
+
+// 下拉菜单项
+.el-select-dropdown__item {
+  padding: 12px 16px !important;
+  border-radius: 10px !important;
+  margin: 3px 0 !important;
+  font-size: 14px !important;
+  color: var(--color-text-secondary) !important;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+
+  &:first-child {
+    margin-top: 0 !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  &:hover,
+  &.hover {
+    background: rgba(102, 126, 234, 0.1) !important;
+    color: var(--color-text-primary) !important;
+  }
+
+  &.is-selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+
+    // 隐藏默认的勾选图标
+    &::after {
+      display: none !important;
+    }
+  }
+
+  // 选中且悬停
+  &.is-selected:hover,
+  &.is-selected.hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%) !important;
+  }
+
+  &.is-disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+// 深色模式
+[data-theme='dark'] {
+  .el-select-dropdown {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .el-select-dropdown__item {
+    color: var(--color-text-secondary) !important;
+
+    &:hover,
+    &.hover {
+      background: rgba(102, 126, 234, 0.2) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    &.is-selected {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+    }
+  }
+}
+
+// 聚焦时边框颜色
+.el-select .el-input.is-focus .el-input__wrapper {
+  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.5) inset !important;
+}
+
+// Popper 箭头隐藏（更简洁）
+.el-popper.is-light.el-select__popper {
+  .el-popper__arrow {
+    display: none !important;
+  }
+}
+
+// ========================================
+// Element Plus DatePicker 高级感样式
+// ========================================
+
+// DatePicker 弹出面板
+.el-picker-panel {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden !important;
+}
+
+// DatePicker 头部（年份切换）
+.el-date-picker__header {
+  padding: 16px 20px 12px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  margin: 0 !important;
+
+  .el-date-picker__header-label {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--color-text-primary) !important;
+    padding: 0 8px !important;
+
+    &:hover {
+      color: #667eea !important;
+    }
+  }
+
+  .el-picker-panel__icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    color: var(--color-text-secondary) !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.1) !important;
+      color: #667eea !important;
+    }
+
+    .el-icon {
+      font-size: 14px !important;
+    }
+  }
+}
+
+// 月份表格
+.el-month-table {
+  padding: 12px 16px 16px !important;
+
+  td {
+    padding: 8px !important;
+
+    .cell {
+      width: 64px !important;
+      height: 40px !important;
+      line-height: 40px !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: var(--color-text-secondary) !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+      &:hover {
+        background: rgba(102, 126, 234, 0.1) !important;
+        color: #667eea !important;
+      }
+    }
+
+    &.today .cell {
+      color: #667eea !important;
+      font-weight: 600 !important;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: #667eea;
+        border-radius: 50%;
+      }
+    }
+
+    &.current:not(.disabled) .cell {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35) !important;
+    }
+
+    &.disabled .cell {
+      opacity: 0.35 !important;
+      cursor: not-allowed !important;
+      color: var(--color-text-muted) !important;
+
+      &:hover {
+        background: transparent !important;
+        color: var(--color-text-muted) !important;
+      }
+    }
+  }
+}
+
+// 年份表格
+.el-year-table {
+  padding: 12px 16px 16px !important;
+
+  td {
+    padding: 8px !important;
+
+    .cell {
+      width: 64px !important;
+      height: 40px !important;
+      line-height: 40px !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: var(--color-text-secondary) !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+      &:hover {
+        background: rgba(102, 126, 234, 0.1) !important;
+        color: #667eea !important;
+      }
+    }
+
+    &.today .cell {
+      color: #667eea !important;
+      font-weight: 600 !important;
+    }
+
+    &.current:not(.disabled) .cell {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35) !important;
+    }
+
+    &.disabled .cell {
+      opacity: 0.35 !important;
+      cursor: not-allowed !important;
+    }
+  }
+}
+
+// DatePicker 输入框
+.el-date-editor {
+  .el-input__wrapper {
+    background: var(--color-bg-secondary) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 0 1px var(--color-border) inset !important;
+    padding: 0 12px !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.4) inset !important;
+    }
+
+    &.is-focus {
+      box-shadow:
+        0 0 0 1px #667eea inset,
+        0 0 0 3px rgba(102, 126, 234, 0.15) !important;
+    }
+  }
+
+  .el-input__inner {
+    font-weight: 500 !important;
+  }
+
+  .el-input__prefix,
+  .el-input__suffix {
+    color: var(--color-text-muted) !important;
+  }
+}
+
+// 深色模式 DatePicker
+[data-theme='dark'] {
+  .el-picker-panel {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .el-date-picker__header {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+
+    .el-date-picker__header-label {
+      color: rgba(255, 255, 255, 0.9) !important;
+
+      &:hover {
+        color: #818cf8 !important;
+      }
+    }
+
+    .el-picker-panel__icon-btn {
+      color: rgba(255, 255, 255, 0.6) !important;
+
+      &:hover {
+        background: rgba(129, 140, 248, 0.15) !important;
+        color: #818cf8 !important;
+      }
+    }
+  }
+
+  .el-month-table,
+  .el-year-table {
+    td {
+      .cell {
+        color: rgba(255, 255, 255, 0.7) !important;
+
+        &:hover {
+          background: rgba(129, 140, 248, 0.15) !important;
+          color: #818cf8 !important;
+        }
+      }
+
+      &.today .cell {
+        color: #818cf8 !important;
+
+        &::after {
+          background: #818cf8;
+        }
+      }
+
+      &.current:not(.disabled) .cell {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+      }
+
+      &.disabled .cell {
+        color: rgba(255, 255, 255, 0.3) !important;
+      }
+    }
+  }
+
+  .el-date-editor {
+    .el-input__wrapper {
+      background: rgba(255, 255, 255, 0.05) !important;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+
+      &:hover {
+        box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4) inset !important;
+      }
+
+      &.is-focus {
+        box-shadow:
+          0 0 0 1px #818cf8 inset,
+          0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+      }
+    }
+
+    .el-input__inner {
+      color: rgba(255, 255, 255, 0.9) !important;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+    }
+
+    .el-input__prefix,
+    .el-input__suffix {
+      color: rgba(255, 255, 255, 0.5) !important;
+    }
+  }
+}
+
+// Popper 箭头样式
+.el-popper.is-light.el-date-picker__popper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  .el-popper__arrow {
+    display: none !important;
+  }
+}
+
+// ========================================
+// Bing DatePicker 专用样式（月份选择器）
+// ========================================
+.el-popper.bing-date-picker-popper,
+.bing-date-picker-popper.el-popper,
+.bing-date-picker-popper {
+  // 外层 popper 容器
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  // 隐藏箭头
+  .el-popper__arrow {
+    display: none !important;
+  }
+
+  // 内层面板
+  .el-picker-panel {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+    overflow: hidden !important;
+  }
+
+  // 头部（年份切换）
+  .el-date-picker__header {
+    padding: 16px 20px 12px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    margin: 0 !important;
+  }
+
+  .el-date-picker__header-label {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    padding: 0 8px !important;
+
+    &:hover {
+      color: #667eea !important;
+    }
+  }
+
+  .el-picker-panel__icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    color: #6b7280 !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.1) !important;
+      color: #667eea !important;
+    }
+  }
+
+  // 月份表格
+  .el-month-table {
+    padding: 12px 16px 16px !important;
+
+    td {
+      padding: 8px !important;
+
+      .el-date-table-cell {
+        width: 64px !important;
+        height: 40px !important;
+        border-radius: 20px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #6b7280 !important;
+        background: #f3f4f6 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: inherit !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        &:hover {
+          background: rgba(102, 126, 234, 0.15) !important;
+          color: #667eea !important;
+        }
+      }
+
+      &.today .el-date-table-cell {
+        color: #667eea !important;
+        font-weight: 600 !important;
+        background: rgba(102, 126, 234, 0.1) !important;
+      }
+
+      // 选中状态
+      &.current .el-date-table-cell {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35) !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: white !important;
+        }
+      }
+
+      &.disabled .el-date-table-cell {
+        opacity: 0.35 !important;
+        cursor: not-allowed !important;
+        color: #9ca3af !important;
+        background: #f9fafb !important;
+
+        &:hover {
+          background: #f9fafb !important;
+          color: #9ca3af !important;
+        }
+      }
+    }
+  }
+
+  // 年份表格
+  .el-year-table {
+    padding: 12px 16px 16px !important;
+
+    td {
+      padding: 8px !important;
+
+      .el-date-table-cell {
+        width: 64px !important;
+        height: 40px !important;
+        border-radius: 20px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #6b7280 !important;
+        background: #f3f4f6 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: inherit !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        &:hover {
+          background: rgba(102, 126, 234, 0.15) !important;
+          color: #667eea !important;
+        }
+      }
+
+      &.today .el-date-table-cell {
+        color: #667eea !important;
+        font-weight: 600 !important;
+      }
+
+      // 选中状态
+      &.current .el-date-table-cell {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35) !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: white !important;
+        }
+      }
+
+      &.disabled .el-date-table-cell {
+        opacity: 0.35 !important;
+        cursor: not-allowed !important;
+      }
+    }
+  }
+}
+
+// 深色模式 Bing DatePicker
+[data-theme='dark'] .el-popper.bing-date-picker-popper,
+[data-theme='dark'] .bing-date-picker-popper.el-popper,
+[data-theme='dark'] .bing-date-picker-popper {
+  .el-picker-panel {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .el-date-picker__header {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .el-date-picker__header-label {
+    color: rgba(255, 255, 255, 0.9) !important;
+
+    &:hover {
+      color: #818cf8 !important;
+    }
+  }
+
+  .el-picker-panel__icon-btn {
+    color: rgba(255, 255, 255, 0.6) !important;
+
+    &:hover {
+      background: rgba(129, 140, 248, 0.15) !important;
+      color: #818cf8 !important;
+    }
+  }
+
+  .el-month-table,
+  .el-year-table {
+    td {
+      .el-date-table-cell {
+        color: rgba(255, 255, 255, 0.7) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: inherit !important;
+        }
+
+        &:hover {
+          background: rgba(129, 140, 248, 0.15) !important;
+          color: #818cf8 !important;
+        }
+      }
+
+      &.today .el-date-table-cell {
+        color: #818cf8 !important;
+        background: rgba(129, 140, 248, 0.1) !important;
+      }
+
+      &.current .el-date-table-cell {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+
+        .el-date-table-cell__text {
+          background: transparent !important;
+          color: white !important;
+        }
+      }
+
+      &.disabled .el-date-table-cell {
+        color: rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+      }
+    }
+  }
+}
+
+// ========================================
+// 全局覆盖 Element Plus 月份选择器选中样式
+// ========================================
+.el-month-table td.current .el-date-table-cell,
+.el-year-table td.current .el-date-table-cell {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35) !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.el-month-table td.current .el-date-table-cell__text,
+.el-year-table td.current .el-date-table-cell__text {
+  background: transparent !important;
+  color: white !important;
+}
+
+// 全局月份/年份表格单元格样式
+.el-month-table td .el-date-table-cell,
+.el-year-table td .el-date-table-cell {
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.el-month-table td .el-date-table-cell__text,
+.el-year-table td .el-date-table-cell__text {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
