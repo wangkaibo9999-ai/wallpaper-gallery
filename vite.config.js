@@ -67,9 +67,7 @@ export default defineConfig({
       enforce: 'post',
     },
   ].filter(Boolean),
-  // base: '/', // 子域名部署使用根路径
-  // 根据部署环境调整 base 路径
-  base: process.env.DEPLOY_ENV === 'esa' ? '/wallpaper-gallery/' : '/',
+  base: '/', // 子域名部署使用根路径
   // 注入全局变量
   define: {
     __APP_VERSION__: JSON.stringify(APP_VERSION),
