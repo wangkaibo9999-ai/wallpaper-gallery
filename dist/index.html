@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+
+    <!-- SEO 基础优化 -->
+    <meta
+      name="description"
+      content="Wallpaper Gallery - 精选高清4K壁纸，涵盖动漫、风景、人像、游戏等多种分类，免费下载，支持电脑壁纸、手机壁纸和头像"
+    />
+    <meta
+      name="keywords"
+      content="壁纸,高清壁纸,4K壁纸,桌面壁纸,手机壁纸,免费壁纸,动漫壁纸,风景壁纸,人像壁纸,游戏壁纸,头像"
+    />
+    <meta name="author" content="Wallpaper Gallery" />
+    <meta name="theme-color" content="#6366f1" />
+
+    <!-- Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wallpaper.061129.xyz/" />
+    <meta property="og:title" content="Wallpaper Gallery - 精选高清壁纸" />
+    <meta
+      property="og:description"
+      content="免费高清 4K 壁纸，涵盖动漫、风景、人像等多种分类，支持电脑壁纸、手机壁纸和头像下载"
+    />
+    <meta property="og:image" content="https://wallpaper.061129.xyz/og-image.jpg" />
+    <meta property="og:site_name" content="Wallpaper Gallery" />
+    <meta property="og:locale" content="zh_CN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://wallpaper.061129.xyz/" />
+    <meta name="twitter:title" content="Wallpaper Gallery - 精选高清壁纸" />
+    <meta name="twitter:description" content="免费高清 4K 壁纸，涵盖动漫、风景、人像等多种分类" />
+    <meta name="twitter:image" content="https://wallpaper.061129.xyz/twitter-card.jpg" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://wallpaper.061129.xyz/" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <title>Wallpaper Gallery - 精选高清4K壁纸免费下载</title>
+
+    <!-- 关键 CSS 内联（首屏渲染优化） -->
+    <style>
+      /* CSS 变量定义 */
+      :root {
+        --color-bg-primary: #f8f9fa;
+        --color-bg-secondary: #ffffff;
+        --color-bg-card: #ffffff;
+        --color-bg-hover: #f1f3f4;
+        --color-bg-modal: rgba(0, 0, 0, 0.6);
+        --color-text-primary: #1a1a2e;
+        --color-text-secondary: #6c757d;
+        --color-text-muted: #adb5bd;
+        --color-border: #e9ecef;
+        --color-accent: #6366f1;
+        --color-accent-hover: #4f46e5;
+        --color-success: #10b981;
+        --color-warning: #f59e0b;
+        --radius-sm: 6px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+        --radius-full: 9999px;
+        --transition-fast: 150ms ease;
+        --transition-slow: 350ms ease;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+        --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.25);
+      }
+
+      [data-theme='dark'] {
+        --color-bg-primary: #0f0f1a;
+        --color-bg-secondary: #1a1a2e;
+        --color-bg-card: #1e1e32;
+        --color-bg-hover: #2a2a42;
+        --color-bg-modal: rgba(0, 0, 0, 0.8);
+        --color-text-primary: #f8f9fa;
+        --color-text-secondary: #a0a0b0;
+        --color-text-muted: #6c6c7c;
+        --color-border: #2a2a42;
+        --color-accent: #818cf8;
+        --color-accent-hover: #a5b4fc;
+      }
+
+      /* 基础重置 */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: clip;
+        scrollbar-gutter: stable;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--color-text-primary);
+        background-color: var(--color-bg-primary);
+        transition:
+          background-color var(--transition-slow),
+          color var(--transition-slow);
+        min-height: 100vh;
+        overflow-x: clip;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      /* 防止弹窗打开时背景滚动 */
+      body.modal-open {
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      /* 应用容器 */
+      #app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* 加载状态骨架屏样式 */
+      .skeleton-shimmer {
+        animation: shimmer 1.5s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    </style>
+
+    <!-- DNS 预解析和预连接（加速 CDN 加载） -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://cn.bing.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cn.bing.com" />
+    <link rel="preconnect" href="https://wsrv.nl" crossorigin />
+    <link rel="dns-prefetch" href="https://wsrv.nl" />
+
+    <!-- Import Map: 映射裸模块说明符到 CDN (使用 unpkg - Cloudflare CDN，国内访问更稳定) -->
+    <!-- 生产环境使用 UMD 全局变量模式，开发环境使用 Import Map -->
+    
+
+    <!-- Umami Analytics (隐私友好的网站统计) - 通过环境变量动态加载 -->
+
+    <!-- 主题初始化脚本（在页面渲染前立即应用，避免闪烁） -->
+    <script>
+      ;(function () {
+        // 主题模式常量
+        const THEME_MODES = {
+          LIGHT: 'light',
+          DARK: 'dark',
+          SYSTEM: 'system',
+          AUTO: 'auto',
+        }
+        const THEMES = {
+          LIGHT: 'light',
+          DARK: 'dark',
+        }
+
+        // 根据时间判断应该使用的主题（6:00-18:00 浅色，其他深色）
+        function getThemeByTime() {
+          const hour = new Date().getHours()
+          return hour >= 6 && hour < 18 ? THEMES.LIGHT : THEMES.DARK
+        }
+
+        // 根据系统偏好判断主题
+        function getThemeBySystem() {
+          if (typeof window !== 'undefined' && window.matchMedia) {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEMES.DARK : THEMES.LIGHT
+          }
+          return THEMES.LIGHT
+        }
+
+        // 根据模式计算实际主题
+        function computeTheme(mode) {
+          switch (mode) {
+            case THEME_MODES.LIGHT:
+              return THEMES.LIGHT
+            case THEME_MODES.DARK:
+              return THEMES.DARK
+            case THEME_MODES.SYSTEM:
+              return getThemeBySystem()
+            case THEME_MODES.AUTO:
+              return getThemeByTime()
+            default:
+              return getThemeBySystem()
+          }
+        }
+
+        // 读取用户保存的主题模式
+        let savedMode = null
+        try {
+          savedMode = localStorage.getItem('wallpaper-gallery-theme-mode')
+        } catch (e) {
+          // localStorage 可能不可用（如隐私模式）
+        }
+
+        // 确定主题模式（默认跟随系统）
+        const themeMode = savedMode && Object.values(THEME_MODES).includes(savedMode) ? savedMode : THEME_MODES.SYSTEM
+
+        // 计算并应用主题
+        const theme = computeTheme(themeMode)
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
+
+    <!-- GitHub Pages SPA 路由恢复脚本 -->
+    <script>
+      ;(function () {
+        var redirect = sessionStorage.getItem('redirect')
+        if (redirect) {
+          sessionStorage.removeItem('redirect')
+          window.history.replaceState(null, null, redirect)
+        }
+      })()
+    </script>
+    
+    <script src="https://unpkg.com/vue@3.5.24/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/vue-demi@0.14.10/lib/index.iife.js"></script>
+    <script src="https://unpkg.com/vue-router@4.6.4/dist/vue-router.global.prod.js"></script>
+    <script type="module" crossorigin src="/assets/js/index-DHOMu9pD.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/gsap-Bc0iluX2.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/vant-BMxSPfAy.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/element-plus-B6GQZf_j.js">
+    <link rel="stylesheet" crossorigin href="/assets/css/index-DUwRHEpq.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "be0503caf5e74f2ab1defc7b3ec1f3d6"}'
+    ></script> -->
+  </body>
+</html>
