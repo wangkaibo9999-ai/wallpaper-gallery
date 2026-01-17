@@ -304,7 +304,7 @@ function closeSearch() {
         </button>
 
         <a
-          href="https://github.com/IT-NuanxinPro/wallpaper-gallery"
+          href="https://github.com/wangkaibo9999-ai/wallpaper-gallery"
           target="_blank"
           rel="noopener noreferrer"
           class="github-link"
@@ -495,7 +495,7 @@ function closeSearch() {
               更多
             </h3>
             <a
-              href="https://github.com/IT-NuanxinPro/wallpaper-gallery"
+              href="https://github.com/wangkaibo9999-ai/wallpaper-gallery"
               target="_blank"
               rel="noopener noreferrer"
               class="link-card"

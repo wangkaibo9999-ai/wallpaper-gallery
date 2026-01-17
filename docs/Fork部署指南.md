@@ -378,4 +378,4 @@ A: 检查以下几点：
 
 ## 技术支持
 
-如有问题，欢迎提交 [Issue](https://github.com/IT-NuanxinPro/wallpaper-gallery/issues)。
+如有问题，欢迎提交 [Issue](https://github.com/wangkaibo9999-ai/wallpaper-gallery/issues)。
